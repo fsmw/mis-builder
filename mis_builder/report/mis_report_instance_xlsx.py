@@ -184,3 +184,17 @@ class MisBuilderXlsx(models.AbstractModel):
         min_col_pos = min(col_width.keys())
         max_col_pos = max(col_width.keys())
         sheet.set_column(min_col_pos, max_col_pos, data_col_width * COL_WIDTH)
+
+    def _write_report_title(self, workbook, sheet, row_pos, report_name):
+        bold = workbook.add_format({"bold": True})
+        sheet.write(row_pos, 0, report_name, bold)
+        return row_pos + 2
+
+    def _write_filters(self, sheet, row_pos, objects):
+        filter_descriptions = objects.get_filter_descriptions()
+        if filter_descriptions:
+            for filter_description in filter_descriptions:
+                sheet.write(row_pos, 0, filter_description)
+                row_pos += 1
+            row_pos += 1
+        return row_pos
